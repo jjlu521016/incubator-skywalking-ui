@@ -24,3 +24,7 @@ export function getAuthority() {
 export function setAuthority(authority) {
   return localStorage.setItem('skywalking-authority', authority);
 }
+
+export function cleanAuthority() {
+  return localStorage.removeItem('skywalking-authority');
+}

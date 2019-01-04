@@ -20,11 +20,13 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
+import  { getAuthority ,cleanAuthority } from '../utils/authority';
 
 const codeMessage = {
   404: 'No resource',
   500: 'Server error',
 };
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -52,6 +54,11 @@ export default function request(url, options) {
     credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
+  // auth info
+  newOptions.headers = {
+    'authorization': getAuthority(),
+    'apmurl' : url,
+  };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     newOptions.headers = {
       Accept: 'application/json',
@@ -70,6 +77,7 @@ export default function request(url, options) {
       return response.json();
     })
     .then((json) => {
+
       const { errors } = json;
       if (errors) {
         errors.forEach((_) => {
@@ -77,6 +85,11 @@ export default function request(url, options) {
             message: _.message,
           });
         });
+      }
+      if(json.biz_code === 401 || json.biz_code === 403){
+        const { dispatch } = store;
+        cleanAuthority();
+        dispatch(routerRedux.push('/user/login'));
       }
       return json;
     })

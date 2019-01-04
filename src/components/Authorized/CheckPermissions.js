@@ -37,7 +37,7 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
     return target;
   }
   if (Array.isArray(authority)) {
-    if (authority.indexOf(currentAuthority) >= 0) {
+    if (currentAuthority.length >= 0) {
       return target;
     }
     return Exception;
