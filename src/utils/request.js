@@ -20,7 +20,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
-import  { getAuthority ,cleanAuthority } from '../utils/authority';
+import  { getAuthority ,cleanAuthority } from "./authority";
 
 const codeMessage = {
   404: 'No resource',
